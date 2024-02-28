@@ -1,7 +1,5 @@
 # Dolado: Teste prático para Backend
 
-## Respostas
-
 - ## Como foi a experiência no decorrer de todo o processo de desenvolvimento?
 
 - ## Quais foram as principais decisões tomadas?
