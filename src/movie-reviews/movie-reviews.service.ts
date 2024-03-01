@@ -1,60 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMovieReviewDto } from './dto/create-movie-review.dto';
-import { FindOneOptions, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneOptions } from 'typeorm';
 import { MovieReview } from './entities/movie-review.entity';
-import axios from 'axios';
 import { UpdateMovieReviewDto } from './dto/update-movie-review.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CustomMovieReviewRepository } from 'src/infra/repositories/movie-review.repository';
 
 @Injectable()
 export class MovieReviewsService {
   constructor(
     @InjectRepository(MovieReview)
-    private readonly movieReviewRepository: Repository<MovieReview>,
+    private readonly MovieReviewRepository: CustomMovieReviewRepository,
   ) {}
 
   async create(
     createMovieReviewDto: CreateMovieReviewDto,
   ): Promise<MovieReview> {
-    const { title, notes } = createMovieReviewDto;
-    const omdbApiKey = 'aa9290ba';
-    const omdbUrl = `http://www.omdbapi.com/?apikey=${omdbApiKey}&t=${encodeURIComponent(title)}`;
-
-    try {
-      const { data } = await axios.get(omdbUrl);
-      const { Released, imdbRating } = data;
-
-      const movieReview = this.movieReviewRepository.create({
-        title,
-        notes,
-        released: Released,
-        imdbRating: parseFloat(imdbRating),
-      });
-
-      return await this.movieReviewRepository.save(movieReview);
-    } catch (error) {
-      console.error(
-        'Erro ao obter informações do filme na API do OMDB:',
-        error,
-      );
-      throw new Error('Erro ao obter informações do filme na API do OMDB');
-    }
+    return this.MovieReviewRepository.createMovieReview(createMovieReviewDto);
   }
 
   async findAll() {
-    return this.movieReviewRepository.find();
+    return this.MovieReviewRepository.find();
   }
 
   async findOne(id: string | FindOneOptions<MovieReview>) {
-    return this.movieReviewRepository.findOne({ where: { id: String(id) } });
+    return this.MovieReviewRepository.findOne({
+      where: { id: String(id) },
+    });
   }
 
   async update(id: string, updateMovieReviewDto: UpdateMovieReviewDto) {
-    await this.movieReviewRepository.update(id, updateMovieReviewDto);
-    return this.findOne(id);
+    return this.MovieReviewRepository.updateMovieReview(
+      id,
+      updateMovieReviewDto,
+    );
   }
 
   async remove(id: string) {
-    await this.movieReviewRepository.delete(id);
+    await this.MovieReviewRepository.delete(id);
   }
 }
