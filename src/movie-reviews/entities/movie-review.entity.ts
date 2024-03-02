@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class MovieReview {
@@ -16,4 +22,14 @@ export class MovieReview {
 
   @Column({ type: 'decimal', nullable: true })
   imdbRating: number;
+
+  @CreateDateColumn({ type: 'datetime2', default: () => 'GETDATE()' })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    type: 'datetime2',
+    default: () => 'GETDATE()',
+    onUpdate: 'GETDATE()',
+  })
+  updatedAt: Date;
 }
