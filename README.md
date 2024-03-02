@@ -5,6 +5,7 @@
   - [Swagger](https://swagger.io/)
   - [TypeORM](https://typeorm.io/)
   - [Azure SQL Server](https://azure.microsoft.com/pt-br/products/azure-sql/?&ef_id=_k_Cj0KCQiA84CvBhCaARIsAMkAvkLMC53iHWM9W7IOZNVOb-4GYPeKpeSR7Pdu927xp8_LBFOpnzkHAn4aAhO8EALw_wcB_k_&OCID=AIDcmmzmnb0182_SEM__k_Cj0KCQiA84CvBhCaARIsAMkAvkLMC53iHWM9W7IOZNVOb-4GYPeKpeSR7Pdu927xp8_LBFOpnzkHAn4aAhO8EALw_wcB_k_&gad_source=1&gclid=Cj0KCQiA84CvBhCaARIsAMkAvkLMC53iHWM9W7IOZNVOb-4GYPeKpeSR7Pdu927xp8_LBFOpnzkHAn4aAhO8EALw_wcB)
+  - [Docker](https://www.docker.com/)
   - [Terraform](https://www.terraform.io/)
 
 ## Perguntas e respostas do teste:
