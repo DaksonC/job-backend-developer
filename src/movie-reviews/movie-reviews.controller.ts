@@ -6,12 +6,14 @@ import {
   Param,
   Delete,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { MovieReviewsService } from './movie-reviews.service';
 import { CreateMovieReviewDto } from './dto/create-movie-review.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { MovieReview } from './entities/movie-review.entity';
 import { UpdateMovieReviewDto } from './dto/update-movie-review.dto';
+import { FindAllMovieReviewsDto } from './dto/findAll-movie-reviews.dto';
 
 @ApiTags('movie-reviews')
 @Controller('movie-reviews')
@@ -26,8 +28,12 @@ export class MovieReviewsController {
   }
 
   @Get()
-  findAll() {
-    return this.movieReviewsService.findAll();
+  async findAll(
+    @Query() query: FindAllMovieReviewsDto,
+  ): Promise<MovieReview[]> {
+    const { page, limit } = query;
+    const pagination = await this.movieReviewsService.findAll(page, limit);
+    return pagination.items;
   }
 
   @Get(':id')

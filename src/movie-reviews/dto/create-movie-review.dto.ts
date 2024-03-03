@@ -1,15 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMovieReviewDto {
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty({
     description: 'O título do filme',
     example: 'Black Widow',
   })
-  title: string;
+  readonly title: string;
 
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty({
-    description: 'Avaliação do usuário para o filme',
+    description: 'Comentário do usuário sobre o filme',
     example: 'Ótimo filme!',
   })
-  notes: string;
+  readonly notes: string;
 }
