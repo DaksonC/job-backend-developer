@@ -11,4 +11,4 @@ import { CustomMovieReviewRepository } from 'src/infra/repositories/movie-review
   providers: [MovieReviewsService, CustomMovieReviewRepository],
   exports: [TypeOrmModule],
 })
-export class MovieReviewsModule { }
+export class MovieReviewsModule {}
