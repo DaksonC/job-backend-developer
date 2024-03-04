@@ -1,0 +1,45 @@
+name: Build and deploy Dockerized Node.js app to Azure Web App - api-test-job
+
+on:
+  push:
+    branches:
+      - feature/teste-dakson
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t daksoncontainer.azurecr.io/app .
+
+      - name: Log in to Azure Container Registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login daksoncontainer.azurecr.io -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+
+      - name: Push Docker Image to Azure Container Registry
+        run: docker push daksoncontainer.azurecr.io/app
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-image
+
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'api-test-job'
+          slot-name: 'production'
+          images: daksoncontainer.azurecr.io/app
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_af0d7127f1fb435fabb9adc926dfc29f }}

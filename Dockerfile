@@ -1,19 +1,17 @@
 FROM node:18
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app 
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-RUN npm install glob rimraf
+RUN yarn install
 
-RUN npm install -S hnswlib-node
-
-RUN npm install
+RUN yarn add hnswlib-node
 
 COPY . .
 
-RUN npm run build
+RUN yarn build 
 
-EXPOSE 3000
+EXPOSE 3000  
 
 CMD ["node", "dist/main"]
