@@ -20,8 +20,8 @@ jobs:
         uses: azure/docker-login@v1
         with:
           registry: daksoncontainer.azurecr.io 
-          username: ${{ secrets.dev.REGISTRY_USERNAME }}
-          password: ${{ secrets.dev.REGISTRY_PASSWORD }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
       
       - name: Docker push Image
         run: docker push daksoncontainer.azurecr.io/app:v1
