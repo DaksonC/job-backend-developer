@@ -8,26 +8,23 @@ on:
 
 jobs:
   build:
-    env:
-      ACR_URL: daksoncontainer.azurecr.io
-      
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Build Docker Image
-        run: docker build -t $ACR_URL/app:v1 .
+        run: docker build -t daksoncontainer.azurecr.io/app:v1 .
 
       - name: Login to ACR 
         uses: actions/checkout@v4
         with:
-          registry: ${{ env.ACR_URL }} 
+          registry: daksoncontainer.azurecr.io 
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       
       - name: Docker push Image
-        run: docker push $ACR_URL/app:v1
+        run: docker push daksoncontainer.azurecr.io/app:v1
 
   deploy:
     runs-on: ubuntu-latest
