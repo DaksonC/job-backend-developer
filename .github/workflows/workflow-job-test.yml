@@ -7,24 +7,27 @@ on:
   workflow_dispatch:
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
+    
+    - name: Build Docker Image
+      run: docker build -t daksoncontainer.azurecr.io/app:v1 .
 
-      - name: Build Docker Image
-        run: docker build -t daksoncontainer.azurecr.io/app:v1 .
+    - name: Login to Azure Container Registry
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Login to ACR 
-        uses: azure/docker-login@v1
-        with:
-          registry: daksoncontainer.azurecr.io 
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      
-      - name: Docker push Image
-        run: docker push daksoncontainer.azurecr.io/app:v1
+    - name: Docker Login to ACR
+      run: |
+        az acr login --name daksoncontainer
+        
+    - name: Docker push Image
+      run: docker push daksoncontainer.azurecr.io/app:v1
 
   deploy:
     runs-on: ubuntu-latest
