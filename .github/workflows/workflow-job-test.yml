@@ -16,10 +16,11 @@ jobs:
       - name: Build Docker Image
         run: docker build -t daksoncontainer.azurecr.io/app .
 
-      - name: Login to ACR and Push Image
-        run: | 
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login daksoncontainer.azurecr.io -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
-          docker push daksoncontainer.azurecr.io/app
+      - name: Docker login
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin daksoncontainer.azurecr.io
+      - name: Docker push
+        run: docker push daksoncontainer.azurecr.io/app
     
       - name: Push Docker Image to Azure Container Registry
         run: docker push daksoncontainer.azurecr.io/app
