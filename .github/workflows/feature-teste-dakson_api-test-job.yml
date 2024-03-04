@@ -14,16 +14,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build Docker Image
-        run: docker build -t my-docker-image .
+        run: docker build -t daksoncontainer.azurecr.io/app .
 
-      - name: Zip artifact for deployment
-        run: echo "No need to zip Docker image for deployment"
+      - name: Log in to Azure Container Registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login daksoncontainer.azurecr.io -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: docker-image
-          path: .
+      - name: Push Docker Image to Azure Container Registry
+        run: docker push daksoncontainer.azurecr.io/app
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,5 +41,5 @@ jobs:
         with:
           app-name: 'api-test-job'
           slot-name: 'production'
-          images: my-docker-image
+          images: daksoncontainer.azurecr.io/app
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_af0d7127f1fb435fabb9adc926dfc29f }}
