@@ -17,7 +17,7 @@ jobs:
         run: docker build -t daksoncontainer.azurecr.io/app:v1 .
 
       - name: Login to ACR 
-        uses: actions/checkout@v4
+        uses: azure/docker-login@v1
         with:
           registry: daksoncontainer.azurecr.io 
           username: ${{ secrets.REGISTRY_USERNAME }}
