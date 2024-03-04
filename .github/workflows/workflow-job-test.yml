@@ -43,6 +43,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'api-test-job'
-          slot-name: 'production'
+          slot-name: 'dev'
           images: daksoncontainer.azurecr.io/app
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_af0d7127f1fb435fabb9adc926dfc29f }}
