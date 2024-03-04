@@ -8,7 +8,7 @@ RUN npm install glob rimraf
 
 RUN npm install -S hnswlib-node
 
-RUN npm install RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
