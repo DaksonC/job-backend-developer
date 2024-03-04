@@ -23,8 +23,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           registry: ${{ env.ACR_URL }} 
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
       
       - name: Docker push Image
         run: docker push $ACR_URL/app:v1
