@@ -45,7 +45,7 @@ jobs:
 
       # Configuração das credenciais da AWS
       - name: Configure AWS credentials
-        uses:  elgohr/ecr-login-action@v3
+        uses:  aws-actions/configure-aws-credentials@v
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -54,7 +54,7 @@ jobs:
       # Login to Amazon ECR
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: elgohr/ecr-login-action@v3
 
       # Build, tag, and push image to Amazon ECR
       - name: Build, tag, and push image to Amazon ECR
