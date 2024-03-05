@@ -1,0 +1,67 @@
+name: CI/CD Pipeline
+
+# Controle quando o workflow será executado
+on:
+  # Acionado quando houver um push para a branch "main"
+  push:
+    branches:
+      - feature/teste-dakson
+  # Acionado quando houver uma pull request direcionada para a branch "main"
+  pull_request:
+    branches:
+      - feature/teste-dakson
+
+# Trabalhos a serem executados
+jobs:
+  build:
+    name: Build and Push to ECR
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout do código-fonte
+      - uses: actions/checkout@v3
+
+      # Configuração do ambiente Node.js
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Instalação das dependências
+      - name: Instalar dependências
+        run: yarn install
+
+      # Construção do projeto
+      - name: Build
+        run: |
+          yarn add hnswlib-node
+          yarn build
+
+      # Upload dos artefatos
+      - name: Upload artefatos
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      # Configuração das credenciais da AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      # Login to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: app-job
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
