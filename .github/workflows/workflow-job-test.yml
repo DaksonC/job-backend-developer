@@ -31,7 +31,7 @@ jobs:
 
     - name: Log in to Azure Container Registry
       run: |
-        docker login $ACR_SERVER --username _ --password $ACR_TOKEN
+        docker login $DB_USERNAME -u _ -p $DB_PASSWORD
 
     - name: Push Docker image to ACR
       run: |
