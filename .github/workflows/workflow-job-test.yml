@@ -18,8 +18,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_NAME: ${{ secrets.DB_NAME }}
       ACR_SERVER: 'daksoncontainer.azurecr.io'
-      ACR_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-      ACR_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      ACR_TOKEN: ${{ secrets.ACR_TOKEN }}
     
     steps:
     - name: Checkout repository
@@ -32,8 +31,7 @@ jobs:
 
     - name: Log in to Azure Container Registry
       run: |
-        az login --username $ACR_USERNAME --password $ACR_PASSWORD
-        az acr login --name $ACR_SERVER
+        docker login $ACR_SERVER --username _ --password $ACR_TOKEN
 
     - name: Push Docker image to ACR
       run: |
