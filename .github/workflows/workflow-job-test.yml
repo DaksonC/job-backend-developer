@@ -22,21 +22,21 @@ jobs:
       ACR_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Build Docker image
-        run: |
-          docker build --tag app-job .
-          docker tag app-job $ACR_SERVER/app-job
+    - name: Build Docker image
+      run: |
+        docker build --tag app-job .
+        docker tag app-job $ACR_SERVER/app-job
 
-      - name: Log in to Azure Container Registry
-        run: |
-          echo $ACR_PASSWORD | docker login $ACR_SERVER --username $ACR_USERNAME --password-stdin
+    - name: Log in to Azure Container Registry
+      run: |
+        echo "${ACR_PASSWORD}" | docker login $ACR_SERVER --username $ACR_USERNAME --password-stdin
 
-      - name: Push Docker image to ACR
-        run: |
-          docker push $ACR_SERVER/app-job
+    - name: Push Docker image to ACR
+      run: |
+        docker push $ACR_SERVER/app-job
 
   deploy:
     runs-on: ubuntu-latest
