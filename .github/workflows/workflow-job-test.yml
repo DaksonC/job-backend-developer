@@ -21,6 +21,8 @@ jobs:
       ACR_TOKEN: ${{ secrets.ACR_TOKEN }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
     
     steps:
     - name: Checkout repository
@@ -33,7 +35,7 @@ jobs:
 
     - name: Log in to Azure Container Registry
       run: |
-        docker login $REGISTRY_USERNAME -u _ -p $REGISTRY_PASSWORD
+        docker login $ACR_SERVER -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD
 
     - name: Push Docker image to ACR
       run: |
