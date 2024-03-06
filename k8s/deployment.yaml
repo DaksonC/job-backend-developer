@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: mssql
-          image: mssqls:15.0
+          image: dakson/job-test-backend
           ports:
           - containerPort: 1433
           env:
