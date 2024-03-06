@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: mssql
 spec:
+  progressDeadlineSeconds: 600
   selector:
     matchLabels:
       app: mssql
