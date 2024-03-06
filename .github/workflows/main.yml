@@ -24,7 +24,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            dakson/job-test-backend:v${{github.run_number}}
+            dakson/job-test-backend:${{github.run_number}}
             dakson/job-test-backend:latest
        
   CD:
@@ -39,6 +39,11 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{secrets.K8S_CONFIG}}
-    
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v4.9
+        with:
+          images: dakson/job-test-backend:${{github.run_number}}
+          manifests: |
+            k8s/deployment.yaml
 
     
