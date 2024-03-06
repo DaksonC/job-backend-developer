@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssql
+spec:
+  selector:
+    matchLabels:
+      app: mssql
+  template:
+    metadata:
+      labels:
+        app: mssql
+    spec:
+      containers:
+        - name: mssql
+          image: mssqls:15.0
+          ports:
+          - containerPort: 1433
+          env:
+          - name: MSSQL_DB
+            value: "kubenews"
+          - name: MSSQL_USER
+            value: "kubenews"
+          - name: MSSQL_PASSWORD
+            value: "Pg#123"  
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql
+spec:
+  selector: 
+    app: mssql
+  ports:
+    - port: 5432
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: web
+          image: dakson/job-test-backend
+          ports:
+          - containerPort: 8080
+          env:
+          - name: DB_DATABASE
+            value: "kubenews"
+          - name: DB_USERNAME
+            value: "kubenews"
+          - name: DB_PASSWORD
+            value: "Pg#123" 
+          - name: DB_HOST
+            value: "mssql"  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector: 
+    app: web
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
