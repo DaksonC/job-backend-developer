@@ -17,11 +17,6 @@ export class MovieReviewsService extends TypeOrmQueryService<MovieReview> {
     super(movieReviewRepository);
   }
 
-  // async create(
-  //   createMovieReviewDto: CreateMovieReviewDto,
-  // ): Promise<MovieReview> {
-  //   return this.movieReviewRepository.save(createMovieReviewDto);
-  // }
   async create(
     createMovieReviewDto: CreateMovieReviewDto,
   ): Promise<MovieReview> {
